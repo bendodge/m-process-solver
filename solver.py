@@ -102,11 +102,11 @@ class TwoClassSolveTester:
 			v_f_s = sim.propagateData(M_s, S)
 
 			drmse += np.square((a_s - a)/a)
-			vrmse += np.sum(np.square((v_f_s - v_f)/v_f))/v_f.shape[0]
-		print('Decay Parameter Error =', np.sqrt(drmse/trials))
-		print('Final Distribution Error =', np.sqrt(vrmse/trials))
+			vrmse += np.sum(np.square((v_f_s - v_f)/v_f))
+		print('Decay Parameter Error =', np.sqrt(drmse))
+		print('Final Distribution Error =', np.sqrt(vrmse))
 		print()
-		return [np.sqrt(drmse/trials), np.sqrt(vrmse/trials)]
+		return [np.sqrt(drmse), np.sqrt(vrmse)]
 
 	# same as above but with a perturbation to the final distribution
 	def perturbedRMSE(self, mag, N, trials):
@@ -129,14 +129,14 @@ class TwoClassSolveTester:
 				v_f_s = sim.propagateData(M_s, S)
 
 				drmse += np.square((a_s - a)/a)
-				vrmse += np.sum(np.square((v_f_s - v_f)/v_f))/v_f.shape[0]
+				vrmse += np.sum(np.square((v_f_s - v_f)/v_f))
 			else:
 				print('a =', a)
 				print()
-		print('Decay Parameter Error =', np.sqrt(drmse/trials))
-		print('Final Distribution Error =', np.sqrt(vrmse/trials))
+		print('Decay Parameter Error =', np.sqrt(drmse))
+		print('Final Distribution Error =', np.sqrt(vrmse))
 		print()
-		return [np.sqrt(drmse/trials), np.sqrt(vrmse/trials)]
+		return [np.sqrt(drmse), np.sqrt(vrmse)]
 
 tester = TwoClassSolveTester()
 #tester.perturbedRMSE(0.01, 10, 1000)
