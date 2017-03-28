@@ -2,9 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.optimize as opt
 
+# utility function
 def getMatrix(a):
 	return np.array([[a, 0], [1-a, 1]])
 
+# simulate M process forward
 class Sim:
 
 	def __init__(self, N):
@@ -14,12 +16,14 @@ class Sim:
 		return self.v(S.shape[1]-1, M, S)
 
 	def v(self, t, M, S):
+		# recursively defined
 		if t == 0:
 			return S[:,[0]]
 		else:
 			return S[:,[t]] + np.dot(M, self.v(t-1, M, S))
 
 
+# solve for the M matrix in the 2-class case
 class TwoClassSolver:
 
 	def __init__(self, S, v_f):
@@ -28,11 +32,13 @@ class TwoClassSolver:
 		self.v_f = v_f
 
 	def solve(self):
+		# get polynomial coefficients
 		self.p = []
 		for i in range(self.N):
 			self.p.append(self.S[0][i])
 		self.p[self.N-1] -= float(self.v_f[0])
 
+		# get roots using numpy.roots
 		self.a = -1
 		sols = np.roots(self.p)
 		for sol in sols:
@@ -54,6 +60,7 @@ class TwoClassSolveTester:
 	def __init__(self):
 		pass
 
+	# basic test with a single, randomly generated matrix and source dataset
 	def example(self, N):
 		a = np.random.rand()
 		S = 100*np.random.rand(2, N)
@@ -76,6 +83,7 @@ class TwoClassSolveTester:
 		print('Error =', np.sum(np.square((v_f_s - v_f)/v_f))/v_f.shape[0])
 		print()
 
+	# many-trial test of randomly generated matrix and source datasets, returns RMSE error for matrix and final distribution
 	def idealRMSE(self, N, trials):
 		drmse = 0
 		vrmse = 0
@@ -100,6 +108,7 @@ class TwoClassSolveTester:
 		print()
 		return [np.sqrt(drmse/trials), np.sqrt(vrmse/trials)]
 
+	# same as above but with a perturbation to the final distribution
 	def perturbedRMSE(self, mag, N, trials):
 		drmse = 0
 		vrmse = 0
